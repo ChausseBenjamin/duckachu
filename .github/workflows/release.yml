@@ -30,7 +30,7 @@ jobs:
           manifest.json \
           background.js \
           content.js \
-          bangs.js \
+          bangs.json \
           icon-16.png \
           icon-48.png \
           icon-128.png \
@@ -38,16 +38,16 @@ jobs:
           
     - name: Generate checksums
       run: |
-        sha256sum duckachu-v${{ steps.version.outputs.VERSION }}.zip > duckachu-v${{ steps.version.outputs.VERSION }}.zip.sha256
-        md5sum duckachu-v${{ steps.version.outputs.VERSION }}.zip > duckachu-v${{ steps.version.outputs.VERSION }}.zip.md5
+        sha256sum duckachu-v${{ steps.version.outputs.VERSION }}.zip > duckachu-v${{ steps.version.outputs.VERSION }}.sha256
+        md5sum duckachu-v${{ steps.version.outputs.VERSION }}.zip > duckachu-v${{ steps.version.outputs.VERSION }}.md5
         
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           duckachu-v${{ steps.version.outputs.VERSION }}.zip
-          duckachu-v${{ steps.version.outputs.VERSION }}.zip.sha256
-          duckachu-v${{ steps.version.outputs.VERSION }}.zip.md5
+          duckachu-v${{ steps.version.outputs.VERSION }}.sha256
+          duckachu-v${{ steps.version.outputs.VERSION }}.md5
         generate_release_notes: true
         name: Duckachu v${{ steps.version.outputs.VERSION }}
         body: |

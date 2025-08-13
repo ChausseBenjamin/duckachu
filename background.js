@@ -13,12 +13,8 @@ let defaultBang = null;
 // Load the bangs data when the extension starts
 async function loadBangs() {
   try {
-    const response = await fetch(browser.runtime.getURL('bangs.js'));
-    const text = await response.text();
-    
-    // Execute the script to get the bangs array
-    const script = new Function(text + '; return bangs;');
-    bangs = script();
+    const response = await fetch(browser.runtime.getURL('bangs.json'));
+    bangs = await response.json();
     
     // Set default bang to Google
     defaultBang = bangs.find(b => b.t === 'g') || bangs[0];

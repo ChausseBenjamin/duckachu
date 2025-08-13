@@ -1,14 +1,4 @@
-/*
- * DuckDuckGo Bang Database
- * Originally sourced from https://duckduckgo.com/bang.js
- * Adapted from the unduck project: https://github.com/t3dotgg/unduck
- * Copyright (c) 2025 Theo Browne (unduck project)
- * Licensed under the MIT License
- */
-
-// This file was (mostly) ripped from https://duckduckgo.com/bang.js
-
-const bangs = [
+[
   {
     c: "AI",
     d: "www.t3.chat",
