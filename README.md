@@ -1,13 +1,21 @@
+<div align="center">
+
+  <img alt="Legally distinct electric duck" src="logo.png" width="250px" />
+
 # Duckachu
 
-This Firefox extension provides lightning fast duck bangs without interfering with your preferred search engine. It only triggers when the first character in a search is a bang (`!`).
+Lightning Fast DuckDuckGo Bangs!
+
+</div>
+
+This Firefox extension provides fast duck bangs without interfering with your preferred search engine by using a local list of bangs. It only triggers when the first character in a search is a bang (`!`).
 
 ## Features
 
 - **Local redirects**: No server calls, all processing happens locally for fast redirects
 - **Non-intrusive**: Only activates when searches start with `!`
-- **Full compatibility**: Uses the complete DuckDuckGo bang database from unduck
-- **Multi-engine support**: Works with Google, Bing, DuckDuckGo, Yahoo, Yandex, and Baidu
+- **Full compatibility**: Uses the complete DuckDuckGo bang database
+- **Multi-engine support**: Works with Google, Bing, DuckDuckGo, Yahoo, Yandex, and Baidu, etc...
 
 ## Installation
 
