@@ -1,0 +1,67 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Extract version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
+    - name: Update manifest version
+      run: |
+        sed -i 's/"version": "[^"]*"/"version": "${{ steps.version.outputs.VERSION }}"/' manifest.json
+        
+    - name: Create extension package
+      run: |
+        zip -r duckachu-v${{ steps.version.outputs.VERSION }}.zip \
+          manifest.json \
+          background.js \
+          content.js \
+          bangs.js \
+          icon-16.png \
+          icon-48.png \
+          icon-128.png \
+          -x "*.git*" "test.html" "logo.png" "README.md" "INSTALL.md"
+          
+    - name: Generate checksums
+      run: |
+        sha256sum duckachu-v${{ steps.version.outputs.VERSION }}.zip > duckachu-v${{ steps.version.outputs.VERSION }}.zip.sha256
+        md5sum duckachu-v${{ steps.version.outputs.VERSION }}.zip > duckachu-v${{ steps.version.outputs.VERSION }}.zip.md5
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          duckachu-v${{ steps.version.outputs.VERSION }}.zip
+          duckachu-v${{ steps.version.outputs.VERSION }}.zip.sha256
+          duckachu-v${{ steps.version.outputs.VERSION }}.zip.md5
+        generate_release_notes: true
+        name: Duckachu v${{ steps.version.outputs.VERSION }}
+        body: |
+          ## Duckachu v${{ steps.version.outputs.VERSION }}
+          
+          Lightning fast duck bangs Firefox extension.
+          
+          ### Installation
+          1. Download `duckachu-v${{ steps.version.outputs.VERSION }}.zip`
+          2. Verify integrity with provided checksums
+          3. Load as temporary add-on in Firefox or submit to AMO
+          
+          ### Checksums
+          - SHA256: See `.sha256` file
+          - MD5: See `.md5` file
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

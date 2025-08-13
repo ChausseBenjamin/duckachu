@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bang Extension Test</title>
+</head>
+<body>
+    <h1>Duckachu Extension Test</h1>
+    <p>Open the browser console and test the bang processing:</p>
+    
+    <script src="bangs.js"></script>
+    <script>
+        // Test the bang processing logic
+        function getBangRedirectUrl(query) {
+            if (!query || !bangs.length) return null;
+            
+            const trimmedQuery = query.trim();
+            if (!trimmedQuery) return null;
+            
+            // Look for bang pattern: !bangname
+            const match = trimmedQuery.match(/!(\S+)/i);
+            
+            const bangCandidate = match?.[1]?.toLowerCase();
+            const defaultBang = bangs.find(b => b.t === 'g') || bangs[0];
+            const selectedBang = bangs.find(b => b.t === bangCandidate) || defaultBang;
+            
+            // Remove the first bang from the query
+            const cleanQuery = trimmedQuery.replace(/!\S+\s*/i, '').trim();
+            
+            // If the query is just `!gh`, use the domain directly
+            if (cleanQuery === '') {
+                return selectedBang ? `https://${selectedBang.d}` : null;
+            }
+            
+            // Format the URL with the search query
+            const searchUrl = selectedBang?.u.replace(
+                '{{{s}}}',
+                encodeURIComponent(cleanQuery).replace(/%2F/g, '/')
+            );
+            
+            return searchUrl || null;
+        }
+
+        // Test cases
+        console.log('Testing bang redirects:');
+        console.log('!gh opencode ->', getBangRedirectUrl('!gh opencode'));
+        console.log('!w firefox ->', getBangRedirectUrl('!w firefox'));
+        console.log('!yt cats ->', getBangRedirectUrl('!yt cats'));
+        console.log('!a laptop ->', getBangRedirectUrl('!a laptop'));
+        console.log('!gh ->', getBangRedirectUrl('!gh'));
+        console.log('regular search ->', getBangRedirectUrl('regular search'));
+        
+        // Make test function available globally
+        window.testBang = getBangRedirectUrl;
+        console.log('Use testBang("!your search") to test more cases');
+    </script>
+</body>
+</html>
